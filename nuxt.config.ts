@@ -6,6 +6,9 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  css: ['~/assets/css/main.css'],
+  app: {
+  },
  // esto esta en la configuracion e instalacion de VUETIFY con nuxt, son nodos necesarios para el funcionamiento de Vuetify
    build: {
     transpile: ['vuetify'],

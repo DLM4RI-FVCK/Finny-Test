@@ -1,3 +1,10 @@
 <template>
-		<LoginForm />
+	<LoginForm />
 </template>
+
+
+<script setup>
+definePageMeta({
+	layout: 'auth',
+})
+</script>

@@ -1,5 +1,5 @@
 <template>
-  <v-main class="bg-primary">
+  <v-main>
     <NuxtPage/>
   </v-main>
 </template>

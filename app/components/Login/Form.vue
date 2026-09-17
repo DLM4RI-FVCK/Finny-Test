@@ -1,40 +1,31 @@
 <template>
-	<v-row class="bg-white">
-		<v-col>
-			<v-col class="text-textos text-center">
-				<h1 style="font-size: 62px;">Finny</h1>
-				<p class="text-body-small font-weight-bold">Finanzas Educativas</p>
-			</v-col>
-			<v-col class="justify-center aling-center d-flex">
-				<v-img src="/register.png" width="320" height="300" max-width="100%" />
-			</v-col>
+	<v-row class="fill-height align-center justify-center">
+		<v-col cols="12" md="8" lg="6">
+			<LoginLogo />
+
 			<v-col class="text-center">
-				<h1 style="font-size: 62px;" class="pa-5">Registro</h1>
-				<p>Registrate para entrar a Finny</p>
+				<h1 style="font-size: 62px;" class="pa-5 font-weight-black text-textos2">Bienvenido</h1>
+				<p style="margin-top: -75px; margin-bottom: 50px;">Inicio sesion o registrate</p>
 			</v-col>
+
 			<v-form v-model="valid">
-				<v-container>
-					<v-row>
-						<v-col cols="6" md="4">
-							<v-text-field v-model="firstname" :counter="10" :rules="nameRules" label="Nombre" required />
-						</v-col>
-						<v-col cols="6" md="4">
-							<v-text-field v-model="lastname" :counter="10" :rules="nameRules" label="Apellido" required />
-						</v-col>
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="E-mail" required />
-						</v-col>
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Confirm E-mail" required />
-						</v-col>
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Contraseña" required />
-						</v-col>
-						<v-col cols="12">
-							<v-btn class="bg-botones font-weight-bold text-textos font-size-x-large" text="REGISTERARSE" width="100%" height="50" />
-						</v-col>
-					</v-row>
-				</v-container>
+				<v-row>
+					<v-col cols="12" md="4">
+						<v-text-field class="auth-input" v-model="email" :rules="emailRules" label="E-mail" type="email" variant="outlined"
+							rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1"
+							density="comfortable" hide-details="auto" required />
+					</v-col>
+					<v-col cols="12" md="4">
+						<v-text-field class="auth-input" v-model="password" :rules="passwordRules" label="Contraseña" type="password"
+							variant="outlined" rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1"
+							density="comfortable" hide-details="auto" required />
+					</v-col>
+					<v-col cols="12">
+						<v-btn to="/dashboard" rounded class="bg-botones font-weight-black text-textos font-size-x-large"
+							text="INICIAR SESIÓN" width="100%" height="50" />
+						<p class="text-right mr-3 font-weight-bold">No tienes cuenta? <nuxt-link to="/register" class="text-primary font-weight-bold">Registrate aqui</nuxt-link></p>
+					</v-col>
+				</v-row>
 			</v-form>
 		</v-col>
 	</v-row>
@@ -42,243 +33,38 @@
 
 <script>
 export default {
-	data: () => ({
-		valid: false,
-		firstname: '',
-		lastname: '',
-		nameRules: [
-			value => value || 'Name is required.',
-			value => value?.length <= 10 || 'Name must be less than 10 characters.',
-		],
-		email: '',
-		emailRules: [
-			value => value || 'E-mail is required.',
-			value => /.+@.+\..+/.test(value) || 'E-mail must be valid.',
-		],
-	}),
+	data() {
+		return {
+			valid: false,
+			email: '',
+			password: '',
+			emailRules: [
+				value => !!value || 'El email es obligatorio.',
+				value => /.+@.+\..+/.test(value) || 'Ingresa un email válido.',
+			],
+			passwordRules: [value => !!value || 'La contraseña es obligatoria.'],
+		}
+	},
 }
+
+
+
 </script>
 
-<style>
-.subtitulo {
-	margin-top: -30px;
+<style scoped>
+.auth-input :deep(.v-field) {
+	background-color: rgba(255, 255, 255, 0.88) !important;
 }
-</style><!--<template>
-	<v-row class="bg-white">
-		<v-col>
-			<v-col class="text-textos text-center">
-				<div>
-					<h1 style="font-size: 62px;">
-						Finny
-					</h1>
-				</div>
-				<div style="margin-top: -65px; margin-left: -34px;">
-					<p class="text-body-small font-weight-bold">
-						Finanzas Educativas
-					</p>
-				</div>
-			</v-col>
-			<v-col class="justify-center aling-center d-flex	">
-				<v-img src="/register.png" width="320" height="300" max-width="100%" />
-			</v-col>
-			<v-col>
-				<div  class="text-center">
-					<h1 style="font-size: 62px;" class="pa-5">Registro
-					</h1>
-					<p style="margin-top: -70px;">
-						Registrate para entrar a Finny
-					</p>
-				</div>
-			</v-col>
-			<v-form v-model="valid">
-				<v-container>
-					<v-row>
-						<v-row>
-							<v-col cols="6" md="4">
-								<v-text-field v-model="firstname" :counter="10" :rules="nameRules" label="Nombre"
-									required></v-text-field>
-							</v-col>
 
-							<v-col cols="6" md="4">
-								<v-text-field v-model="lastname" :counter="10" :rules="nameRules" label="Apellido"
-									required></v-text-field>
-							</v-col>
-						</v-row>
-
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-						</v-col>
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Confirm E-mail"
-								required></v-text-field>
-						</v-col>
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Contraseña"
-								required></v-text-field>
-						</v-col>
-
-						<v-col cols="12">
-							<v-btn class="bg-botones font-weight-bold text-textos font-size-x-large" text="REGISTERARSE"
-								width="100%" height="50" max-width="100%"></v-btn>
-						</v-col>
-					</v-row>
-				</v-container>
-			</v-form>
-		</v-col>
-	</v-row>
-
-
-</template>
-
-<script>
-export default {
-	data: () => ({
-		valid: false,
-		firstname: '',
-		lastname: '',
-		nameRules: [
-			value => {
-				if (value) return true
-
-				return 'Name is required.'
-			},
-			value => {
-				if (value?.length <= 10) return true
-
-				return 'Name must be less than 10 characters.'
-			},
-		],
-		email: '',
-		emailRules: [
-			value => {
-				if (value) return true
-
-				return 'E-mail is required.'
-			},
-			value => {
-				if (/.+@.+\..+/.test(value)) return true
-
-				return 'E-mail must be valid.'
-			},
-		],
-	}),
+.auth-input :deep(.v-field__outline),
+.auth-input :deep(.v-label) {
+	color: rgba(174, 174, 178, 0.62) !important;
 }
-</script>
 
-<style>
-.subtitulo {
-	margin-top: -30px;
+.auth-input.v-input--dirty:not(.v-input--error) :deep(.v-field__outline),
+.auth-input.v-input--dirty:not(.v-input--error) :deep(.v-label),
+.auth-input.v-input--dirty:not(.v-input--error) :deep(.v-field__prepend-inner .v-icon),
+.auth-input.v-input--dirty:not(.v-input--error) :deep(.v-field__append-inner .v-icon) {
+	color: #a8d5ba !important;
 }
-</style><template>
-	<v-row class="bg-white">
-		<v-col>
-			<v-col class="text-textos text-center">
-				<div>
-					<h1 style="font-size: 62px;">
-						Finny
-					</h1>
-				</div>
-				<div style="margin-top: -65px; margin-left: -34px;">
-					<p class="text-body-small font-weight-bold">
-						Finanzas Educativas
-					</p>
-				</div>
-			</v-col>
-			<v-col class="justify-center aling-center d-flex	">
-				<v-img src="/register.png" width="320" height="300" max-width="100%" />
-			</v-col>
-			<v-col>
-				<div  class="text-center">
-					<h1 style="font-size: 62px;" class="pa-5">Registro
-					</h1>
-					<p style="margin-top: -70px;">
-						Registrate para entrar a Finny
-					</p>
-				</div>
-			</v-col>
-			<v-form v-model="valid">
-				<v-container>
-					<v-row>
-						<v-row>
-							<v-col cols="6" md="4">
-								<v-text-field v-model="firstname" :counter="10" :rules="nameRules" label="Nombre"
-									required></v-text-field>
-							</v-col>
-
-							<v-col cols="6" md="4">
-								<v-text-field v-model="lastname" :counter="10" :rules="nameRules" label="Apellido"
-									required></v-text-field>
-							</v-col>
-						</v-row>
-
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-						</v-col>
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Confirm E-mail"
-								required></v-text-field>
-						</v-col>
-
-						<v-col cols="12" md="4">
-							<v-text-field v-model="email" :rules="emailRules" label="Contraseña"
-								required></v-text-field>
-						</v-col>
-
-						<v-col cols="12">
-							<v-btn class="bg-botones font-weight-bold text-textos font-size-x-large" text="REGISTERARSE"
-								width="100%" height="50" max-width="100%"></v-btn>
-						</v-col>
-					</v-row>
-				</v-container>
-			</v-form>
-		</v-col>
-	</v-row>
-
-
-</template>
-
-<script>
-export default {
-	data: () => ({
-		valid: false,
-		firstname: '',
-		lastname: '',
-		nameRules: [
-			value => {
-				if (value) return true
-
-				return 'Name is required.'
-			},
-			value => {
-				if (value?.length <= 10) return true
-
-				return 'Name must be less than 10 characters.'
-			},
-		],
-		email: '',
-		emailRules: [
-			value => {
-				if (value) return true
-
-				return 'E-mail is required.'
-			},
-			value => {
-				if (/.+@.+\..+/.test(value)) return true
-
-				return 'E-mail must be valid.'
-			},
-		],
-	}),
-}
-</script>
-
-<style>
-.subtitulo {
-	margin-top: -30px;
-}
-</style>-->
+</style>
