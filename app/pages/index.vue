@@ -64,12 +64,12 @@
 // La idea es: al entrar a la página, esperar 3 segundos y luego ir a login.
 
 // Este valor guarda el temporizador para poder limpiarlo si la página se desmonta antes.
-let redirectTimer = null
+let temporizadorRedireccion = null
 
 // onMounted se ejecuta cuando la página termina de cargarse.
 // Aquí arrancamos el contador de 3 segundos.
 onMounted(() => {
-  redirectTimer = setTimeout(() => {
+  temporizadorRedireccion = setTimeout(() => {
     // navigateTo es una función de Nuxt para cambiar de ruta.
     // replace: true evita que el usuario vuelva a esta pantalla usando el botón atrás.
     navigateTo('/login', { replace: true })
@@ -79,8 +79,8 @@ onMounted(() => {
 // onBeforeUnmount se ejecuta antes de destruir la vista.
 // Si la página se va antes de terminar los 3 segundos, cancelamos el temporizador.
 onBeforeUnmount(() => {
-  if (redirectTimer) {
-    clearTimeout(redirectTimer)
+  if (temporizadorRedireccion) {
+    clearTimeout(temporizadorRedireccion)
   }
 })
 </script>

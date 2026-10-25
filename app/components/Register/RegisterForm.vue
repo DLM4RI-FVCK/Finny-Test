@@ -14,18 +14,20 @@
 
       <!--
         v-form agrupa los inputs y el botón.
+        v-model guarda si los datos pasan las reglas de Vuetify.
         En esta versión los dos primeros campos van juntos en una sola fila.
       -->
-      <v-form v-model="valid" class="register-form w-100">
+      <v-form v-model="formularioValido" class="register-form w-100" @submit.prevent="registrar">
         <v-row class="ma-0" dense>
+          <!-- Cada v-model guarda lo que se escribe en ese campo. -->
           <v-col class="field-col pa-1" cols="6" sm="6">
-            <v-text-field class="auth-input" v-model="nombre" label="Nombre" :rules="requiredRule" clearable variant="outlined"
+            <v-text-field class="auth-input" v-model="nombre" label="Nombre" :rules="reglaObligatoria" clearable variant="outlined"
               rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1" prepend-inner-icon="mdi-account"
               density="comfortable" hide-details="auto" />
           </v-col>
 
           <v-col class="field-col pa-1" cols="6" sm="6">
-            <v-text-field class="auth-input" v-model="apellido" label="Apellido" :rules="requiredRule" clearable variant="outlined"
+            <v-text-field class="auth-input" v-model="apellido" label="Apellido" :rules="reglaObligatoria" clearable variant="outlined"
               rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1" prepend-inner-icon="mdi-account"
               density="comfortable" hide-details="auto" />
           </v-col>
@@ -33,25 +35,25 @@
 
 
         <v-col class="field-col pa-1" cols="6" sm="6">
-          <v-text-field class="auth-input" v-model="usuario" label="Usuario" :rules="requiredRule" clearable variant="outlined"
+          <v-text-field class="auth-input" v-model="usuario" label="Usuario" :rules="reglaObligatoria" clearable variant="outlined"
             rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1"
             prepend-inner-icon="mdi-account-circle" density="comfortable" hide-details="auto" />
         </v-col>
 
         <v-col class="field-col pa-1" cols="6" sm="6">
-          <v-text-field class="auth-input" v-model="edad" label="edad" :rules="requiredRule" clearable variant="outlined" rounded="xl"
+          <v-text-field class="auth-input" v-model="edad" label="edad" type="number" min="1" step="1" :rules="reglaObligatoria" clearable variant="outlined" rounded="xl"
             bg-color="white" color="primary" base-color="grey-lighten-1" prepend-inner-icon="mdi-calendar"
             density="comfortable" hide-details="auto" />
         </v-col>
 
         <v-col class="field-col pa-1" cols="12" sm="6">
-          <v-text-field class="auth-input" v-model="email" label="Email" type="email" :rules="emailRules" clearable variant="outlined"
+          <v-text-field class="auth-input" v-model="correoElectronico" label="Email" type="email" :rules="reglasCorreo" clearable variant="outlined"
             rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1" prepend-inner-icon="mdi-email"
             density="comfortable" hide-details="auto" />
         </v-col>
 
         <v-col class="field-col pa-1" cols="12" sm="6">
-          <v-text-field class="auth-input" v-model="password" label="Contraseña" type="password" :rules="passwordRules" clearable
+          <v-text-field class="auth-input" v-model="contrasena" label="Contraseña" type="password" :rules="reglasContrasena" clearable
             variant="outlined" rounded="xl" bg-color="white" color="primary" base-color="grey-lighten-1"
             prepend-inner-icon="mdi-lock" density="comfortable" hide-details="auto" />
         </v-col>
@@ -62,12 +64,12 @@
         -->
         <v-row class="ma-0 mt-4">
           <v-col class="field-col pa-1" cols="12">
-            <v-btn to="/dashboard" type="submit" class=" bg-botones font-weight-black text-textos px-8 w-100" size="large"
+            <v-btn type="submit" class=" bg-botones font-weight-black text-textos px-8 w-100" size="large"
               elevation="0" rounded>
               Registrate
             </v-btn>
-            <p class="text-right mr-3 font-weight-bold">Tienes cuenta? <nuxt-link to="/login"
-                class="text-primary font-weight-bold">Entra aqui</nuxt-link></p>
+            <p class="text-right mr-3 font-weight-bold">Tienes cuenta? <NuxtLink to="/login"
+                class="text-primary font-weight-bold">Entra aqui</NuxtLink></p>
 
           </v-col>
         </v-row>
@@ -77,28 +79,52 @@
 </template>
 
 <script>
+import { useUsuarioStore } from '~/stores/usuario'
+
 export default {
   data() {
     return {
-      valid: false,
+      formularioValido: false,
       nombre: '',
       apellido: '',
       usuario: '',
       edad: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      requiredRule: [value => !!value || 'Este campo es obligatorio.'],
-      emailRules: [
-        value => !!value || 'El email es obligatorio.',
-        value => /.+@.+\..+/.test(value) || 'Ingresa un email válido.',
+      correoElectronico: '',
+      contrasena: '',
+      confirmarContrasena: '',
+      reglaObligatoria: [valor => !!valor || 'Este campo es obligatorio.'],
+      // Estas reglas se ejecutan mientras la persona completa el formulario.
+      reglasCorreo: [
+        valor => !!valor || 'El email es obligatorio.',
+        valor => /.+@.+\..+/.test(valor) || 'Ingresa un email válido.',
       ],
-      passwordRules: [value => !!value || 'La contraseña es obligatoria.'],
-      confirmPasswordRules: [
-        value => !!value || 'Confirma tu contraseña.',
-        value => value === this.password || 'Las contraseñas deben coincidir.',
+      reglasContrasena: [valor => !!valor || 'La contraseña es obligatoria.'],
+      reglasConfirmarContrasena: [
+        valor => !!valor || 'Confirma tu contraseña.',
+        valor => valor === this.contrasena || 'Las contraseñas deben coincidir.',
       ],
     }
+  },
+  methods: {
+    registrar() {
+      if (!this.formularioValido) {
+        return
+      }
+
+      const email = this.correoElectronico.trim()
+      const usuarioStore = useUsuarioStore()
+
+      usuarioStore.guardarUsuario({
+        id: email,
+        usuario: this.usuario.trim(),
+        nombre: this.nombre.trim(),
+        apellido: this.apellido.trim(),
+        edad: Number(this.edad),
+        email,
+      })
+
+      this.$router.push('/dashboard')
+    },
   },
 }
 </script>

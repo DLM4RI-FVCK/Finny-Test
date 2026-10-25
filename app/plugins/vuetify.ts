@@ -3,8 +3,8 @@ import { createVuetify } from "vuetify";
 import "@mdi/font/css/materialdesignicons.css";
 import colors from "vuetify/util/colors";
 
-export default defineNuxtPlugin((app) => {
-  const vuetify = createVuetify({
+export default defineNuxtPlugin((aplicacion) => {
+  const configuracionVuetify = createVuetify({
     theme: {
       themes: {
         light: {
@@ -23,5 +23,5 @@ export default defineNuxtPlugin((app) => {
       },
     },
   });
-  app.vueApp.use(vuetify);
+  aplicacion.vueApp.use(configuracionVuetify);
 });

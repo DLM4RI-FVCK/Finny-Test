@@ -11,7 +11,7 @@
       <Logotipo />
       <v-col cols="12" class="d-flex flex-column justify-center">
         <div class="flex-grow-1 px-10">
-          <NuxtPage />
+          <slot />
         </div>
       </v-col>
     </v-row>
